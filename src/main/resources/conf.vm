@@ -1,0 +1,32 @@
+input {
+    jdbc {
+        jdbc_driver_library => "$jdbc_driver_library"
+        jdbc_driver_class => "$jdbc_driver_class"
+        jdbc_connection_string => "$jdbc_connection_string"
+        jdbc_user => "$jdbc_user"
+        jdbc_password => "$jdbc_password"
+        jdbc_paging_enabled => "$jdbc_paging_enabled"
+        jdbc_page_size => "$jdbc_page_size"
+        #parameters => { "favorite_artist" => "Beethoven" }
+        #schedule => "* * * * *"
+        statement => "$statement"
+    }
+}
+output {
+    elasticsearch {
+        hosts => ["$hosts"]
+        index => "$index"
+        document_type => "$document_type"
+        document_id => "$document_id"
+        user => "$user"
+        #if($parent)
+        parent => "$parent"
+        #end
+        password => "$password"
+        flush_size => $flush_size
+        idle_flush_time => $idle_flush_time
+    }
+    stdout {
+        codec => json_lines
+    }
+}

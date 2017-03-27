@@ -1,0 +1,16 @@
+@echo off
+
+echo [INFO]:start import
+
+@rem 记录当前路径
+set  current_path1=%~dp0
+
+#foreach ($i in $childList)
+@rem  调用子目录
+call %current_path1%/$i/import.bat %1
+#end
+
+
+cd %current_path1%
+
+echo [INFO]: import finished

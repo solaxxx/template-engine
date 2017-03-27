@@ -1,0 +1,19 @@
+@echo off
+
+@rem 只需要修改这里
+set dir_name=$importName
+
+echo [INFO]:start import %dir_name%
+
+@rem 记录当前路径
+set  current_path2=%~dp0
+
+@rem 删除kanban相关index
+curl -XDELETE -u $userName:$password "$host/$index"
+
+@rem  调用子目录
+call %current_path2%/%dir_name%/import.bat %1
+
+cd %current_path2%
+
+echo [INFO]: import %dir_name% finished

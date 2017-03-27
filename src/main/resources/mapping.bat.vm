@@ -1,0 +1,7 @@
+@rem 创建 index
+curl -XPUT -u $userName:$password "$host/$index"
+#foreach ($i in $mappingList)
+@rem 建立 $parent $i 父子关系
+curl -XPUT -u $userName:$password "$host/$index/$i/_mapping" --user $userName:$password -d "{\"$i\":{\"_parent\":{\"type\":\"$parent\"}}}"
+#end
+

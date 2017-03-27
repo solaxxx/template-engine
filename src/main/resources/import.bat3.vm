@@ -1,0 +1,39 @@
+@echo off
+set importName=$importName
+set args1=%1
+echo [INFO]:argument:%1
+echo [INFO]:start to import %importName%
+@rem 判断%LOGSTASH_HOME%环境变量是否存在
+if "%LOGSTASH_HOME%" == "" (
+echo Error: can not find envirment path : LOGSTASH_HOME
+exit /b 1
+)
+
+@rem 判断是否静默模式运行
+if not "%args1%" == "-q" (
+goto quiet
+) else (
+goto requied
+)
+
+:quiet
+set /P var=this operation will rebuild index %importName% [y/n]
+IF not "%var%" == "y" (
+echo [INFO]:stop
+exit /b 1
+)
+
+:requied
+@rem 记录当前路径
+set current_path3=%~dp0
+cd %LOGSTASH_HOME%
+
+echo [INFO]:starting import...
+@rem 运行mapping
+call %current_path3%\mapping\mapping.bat
+@rem 运行导入
+#foreach ($i in $configList)
+call %LOGSTASH_HOME%/logstash.bat -f %current_path3%/conf/$i
+#end
+echo [INFO]:%importName% import finished
+cd %current_path3%
